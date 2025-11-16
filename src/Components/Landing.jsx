@@ -209,26 +209,26 @@ function Landing() {
       >
         <div
           className="hi-text text-white text-center uppercase"
-          style={{ fontFamily: "Inria Sans, sans-serif", fontSize: "96px" }}
+          style={{ fontFamily: "Inria Sans, sans-serif", fontSize: "60px" }}
         >
           Hi There, I am
         </div>
         <div
           className="dhilip-text text-blue-400 text-center uppercase mt-4"
-          style={{ fontFamily: "Inria Sans, sans-serif", fontSize: "160px" }}
+          style={{ fontFamily: "Inria Sans, sans-serif", fontSize: "100px" }}
         >
           Dhilip
         </div>
         <div className="flex gap-6 mt-6 uppercase">
           <div
             className="frontend-text text-white"
-            style={{ fontFamily: "Inria Sans, sans-serif", fontSize: "140px" }}
+            style={{ fontFamily: "Inria Sans, sans-serif", fontSize: "80px" }}
           >
             Frontend
           </div>
           <div
             className="developer-text text-white"
-            style={{ fontFamily: "Inria Sans, sans-serif", fontSize: "140px" }}
+            style={{ fontFamily: "Inria Sans, sans-serif", fontSize: "80px" }}
           >
             Developer
           </div>
