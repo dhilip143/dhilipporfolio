@@ -1,5 +1,6 @@
 
 import About from "./Components/About";
+import Education from "./Components/education";
 import Experience from "./Components/experience";
 import Landing from "./Components/Landing";
 import Projects from "./Components/projects";
@@ -13,7 +14,7 @@ function App() {
       <Tools/>
       <Projects/>
       <Experience/>
-     
+     <Education/>
       
     </>
   );
