@@ -2,11 +2,11 @@ import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import mad from "/src/assets/madraskitchen.png";
-import soc from "/src/assets/landing/scopik.png";
-import third from "/src/assets/landing/thirdvizion.png";
-import ind from "/src/assets/indhra.png";
-import kan from "/src/assets/landing/kanagavali.png";
+import mad from "/src/assets/project/ica2.png";
+import soc from "/src/assets/project/ica3.png";
+import third from "/src/assets/project/thirdvizion.png";
+import ind from "/src/assets/project/ica 1.png";
+import kan from "/src/assets/project/kanagavali.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -24,7 +24,7 @@ export default function Projects() {
     { 
       title: "ThirdVizion Company Website", 
       text: "Built the official company website with a clean, modern UI and service details.",
-      link: "https://thirdvizion.com",
+      link: "https://thirdvizion.com/",
       tools: "React.js",
       image: third
     },

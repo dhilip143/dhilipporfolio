@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import bubble from "/src/assets/landing/bubble.png";
+import resumePdf from "/src/assets/reume/workresume (3).pdf";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -9,6 +11,36 @@ function Landing() {
   const wrapperRef = useRef(null);
   const gridRef = useRef(null);
   const containerRef = useRef(null);
+  const resumeButtonRef = useRef(null);
+
+  /* =====================================================
+     RESUME DOWNLOAD FUNCTION
+  ===================================================== */
+  const handleResumeDownload = () => {
+    // Create a temporary anchor element
+    const link = document.createElement("a");
+    link.href = resumePdf;
+    link.download = "Dhilip_Resume.pdf";
+    
+    // Append to the body, click, and remove
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Console log for debugging
+    console.log("Resume download initiated");
+    
+    // GSAP animation feedback
+    if (resumeButtonRef.current) {
+      gsap.to(resumeButtonRef.current, {
+        scale: 0.95,
+        duration: 0.1,
+        yoyo: true,
+        repeat: 1,
+        ease: "power2.inOut"
+      });
+    }
+  };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -176,6 +208,21 @@ function Landing() {
         ))}
       </div>
 
+      {/* Resume Section - Top Right */}
+      <div className="fixed top-8 right-8 md:right-20 z-50 pointer-events-auto">
+        <div className="w-[280px] md:w-[327px] h-[60px] md:h-[72px] bg-white rounded-3xl flex items-center justify-evenly gap-3 md:gap-4 shadow-lg">
+          <img src={bubble} alt="Profile" className="w-8 h-8 md:w-10 md:h-10" />
+          <button
+            ref={resumeButtonRef}
+            onClick={handleResumeDownload}
+            className="w-[110px] md:w-[128px] h-[42px] md:h-[49px] rounded-lg text-black text-lg md:text-2xl font-medium flex items-center justify-center cursor-pointer hover:bg-gray-200 active:bg-gray-300 transition-colors border-[#C6C6C6] border-2"
+            aria-label="Download Resume"
+          >
+            Resume
+          </button>
+        </div>
+      </div>
+
       {/* Header text */}
       <div
         ref={headerRef}
@@ -189,7 +236,7 @@ function Landing() {
           Hi There, I am
         </div>
         <div
-          className="dhilip-text text-blue-400 text-center uppercase mt-4 text-[60px] md:text-[100px] font-bold"
+          className="dhilip-text text-[#0037ff] text-center uppercase mt-4 text-[60px] md:text-[100px] font-bold"
           style={{ fontFamily: "'Inter Tight', sans-serif" }}
         >
           Dhilip
