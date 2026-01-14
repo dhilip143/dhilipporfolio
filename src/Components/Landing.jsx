@@ -17,20 +17,14 @@ function Landing() {
      RESUME DOWNLOAD FUNCTION
   ===================================================== */
   const handleResumeDownload = () => {
-    // Create a temporary anchor element
     const link = document.createElement("a");
     link.href = resumePdf;
     link.download = "Dhilip_Resume.pdf";
-    
-    // Append to the body, click, and remove
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     
-    // Console log for debugging
-    console.log("Resume download initiated");
-    
-    // GSAP animation feedback
+    // Button press feedback
     if (resumeButtonRef.current) {
       gsap.to(resumeButtonRef.current, {
         scale: 0.95,
@@ -46,7 +40,6 @@ function Landing() {
     const ctx = gsap.context(() => {
       const header = headerRef.current;
       const wrapper = wrapperRef.current;
-      const gridLines = gridRef.current?.querySelectorAll(".grid-line");
       const blueLines = gridRef.current?.querySelectorAll(".blue-line");
 
       if (!header || !wrapper) return;
@@ -56,14 +49,11 @@ function Landing() {
       const frontendText = header.querySelector(".frontend-text");
       const developerText = header.querySelector(".developer-text");
 
-      // Animate blue lines continuously
-      if (blueLines) {
+      // Continuous blue line animations
+      if (blueLines?.length) {
         blueLines.forEach((line, index) => {
-          gsap.fromTo(
-            line,
-            {
-              y: "100vh",
-            },
+          gsap.fromTo(line, 
+            { y: "100vh" }, 
             {
               y: "-100vh",
               duration: 8 + index * 0.5,
@@ -74,9 +64,10 @@ function Landing() {
         });
       }
 
+      // Responsive scroll animations
       ScrollTrigger.matchMedia({
         "(min-width: 1024px)": () => {
-          // Hi There I am + Dhilip upward
+          // Name section moves up
           gsap.to([hiText, dhilipText], {
             y: -300,
             opacity: 0,
@@ -85,96 +76,101 @@ function Landing() {
               trigger: wrapper,
               start: "top top",
               end: "+=100%",
-              scrub: true,
+              scrub: 1,
             },
           });
 
-          // Frontend → left
+          // Frontend slides left
           gsap.to(frontendText, {
-            x: -window.innerWidth,
+            xPercent: -100,
             opacity: 0,
             ease: "power2.inOut",
             scrollTrigger: {
               trigger: wrapper,
               start: "top top",
               end: "+=100%",
-              scrub: true,
+              scrub: 1,
             },
           });
 
-          // Developer → right
+          // Developer slides right
           gsap.to(developerText, {
-            x: window.innerWidth,
+            xPercent: 100,
             opacity: 0,
             ease: "power2.inOut",
             scrollTrigger: {
               trigger: wrapper,
               start: "top top",
               end: "+=100%",
-              scrub: true,
+              scrub: 1,
             },
           });
         },
 
         "(max-width: 1023px)": () => {
-          // Hi There I am + Dhilip upward
+          // Mobile optimized animations
           gsap.to([hiText, dhilipText], {
-            y: -200,
+            y: -150,
             opacity: 0,
             ease: "power2.inOut",
             scrollTrigger: {
               trigger: wrapper,
               start: "top top",
               end: "+=80%",
-              scrub: true,
+              scrub: 1,
             },
           });
 
-          // Frontend → left
           gsap.to(frontendText, {
-            x: -window.innerWidth,
+            xPercent: -80,
             opacity: 0,
             ease: "power2.inOut",
             scrollTrigger: {
               trigger: wrapper,
               start: "top top",
               end: "+=80%",
-              scrub: true,
+              scrub: 1,
             },
           });
 
-          // Developer → right
           gsap.to(developerText, {
-            x: window.innerWidth,
+            xPercent: 80,
             opacity: 0,
             ease: "power2.inOut",
             scrollTrigger: {
               trigger: wrapper,
               start: "top top",
               end: "+=80%",
-              scrub: true,
+              scrub: 1,
             },
           });
         },
       });
     }, containerRef);
 
-    const handleResize = () => ScrollTrigger.refresh();
+    let resizeTimeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 250);
+    };
+
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      clearTimeout(resizeTimeout);
       ctx.revert();
-      ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full min-h-screen bg-black font-contrail overflow-hidden"
+      className="relative w-full min-h-screen bg-black overflow-hidden"
     >
-      {/* Animated Grid Background - Scoped to this component */}
+      {/* Animated Grid Background */}
       <div
         ref={gridRef}
         className="absolute inset-0 w-full h-full z-0 pointer-events-none overflow-hidden"
@@ -192,7 +188,7 @@ function Landing() {
           />
         ))}
         
-        {/* Animated Blue Lines - Smaller/Shorter */}
+        {/* Animated Blue Lines */}
         {[...Array(12)].map((_, i) => (
           <div
             key={`blue-${i}`}
@@ -208,14 +204,18 @@ function Landing() {
         ))}
       </div>
 
-      {/* Resume Section - Top Right */}
-      <div className="fixed top-8 right-8 md:right-20 z-50 pointer-events-auto">
-        <div className="w-[280px] md:w-[327px] h-[60px] md:h-[72px] bg-white rounded-3xl flex items-center justify-evenly gap-3 md:gap-4 shadow-lg">
-          <img src={bubble} alt="Profile" className="w-8 h-8 md:w-10 md:h-10" />
+      {/* Resume Button - Fixed Top Right */}
+      <div className="fixed top-6 right-6 md:top-8 md:right-20 z-50">
+        <div className="w-[260px] md:w-[327px] h-[56px] md:h-[72px] bg-white rounded-3xl flex items-center justify-center gap-4 shadow-2xl hover:shadow-3xl transition-all duration-300">
+          <img 
+            src={bubble} 
+            alt="Profile icon" 
+            className="w-9 h-9 md:w-11 md:h-11 flex-shrink-0"
+          />
           <button
             ref={resumeButtonRef}
             onClick={handleResumeDownload}
-            className="w-[110px] md:w-[128px] h-[42px] md:h-[49px] rounded-lg text-black text-lg md:text-2xl font-medium flex items-center justify-center cursor-pointer hover:bg-gray-200 active:bg-gray-300 transition-colors border-[#C6C6C6] border-2"
+            className="flex-1 max-w-[130px] h-[44px] md:h-[52px] bg-transparent border-2 border-[#C6C6C6] rounded-xl text-black font-semibold text-base md:text-xl hover:bg-gray-100 active:bg-gray-200 active:scale-95 transition-all duration-200 flex items-center justify-center shadow-md hover:shadow-lg"
             aria-label="Download Resume"
           >
             Resume
@@ -223,33 +223,32 @@ function Landing() {
         </div>
       </div>
 
-      {/* Header text */}
+      {/* Hero Text - Fixed Center */}
       <div
         ref={headerRef}
-        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center w-full z-30 pointer-events-none"
-        aria-hidden
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col lg:flex-col items-center justify-center w-full z-40 pointer-events-none px-4 md:px-8"
       >
         <div
-          className="hi-text text-white text-center uppercase text-[40px] md:text-[60px] font-regular"
+          className="hi-text text-white text-center uppercase tracking-wider text-[2.5rem] sm:text-[3rem] md:text-[4rem] lg:text-[5rem] font-normal leading-tight mb-2 md:mb-4"
           style={{ fontFamily: "'Inter Tight', sans-serif" }}
         >
           Hi There, I am
         </div>
         <div
-          className="dhilip-text text-[#0037ff] text-center uppercase mt-4 text-[60px] md:text-[100px] font-bold"
+          className="dhilip-text text-[#0037ff] text-center uppercase tracking-[0.1em] text-[3.5rem] sm:text-[4.5rem] md:text-[6rem] lg:text-[8rem] font-black leading-tight"
           style={{ fontFamily: "'Inter Tight', sans-serif" }}
         >
           Dhilip
         </div>
-        <div className="flex gap-4 md:gap-6 mt-4 md:mt-6 uppercase flex-wrap justify-center px-4">
+        <div className="flex flex-wrap gap-4 md:gap-8 mt-6 md:mt-8 uppercase justify-center px-2">
           <div
-            className="frontend-text text-white text-[40px] md:text-[80px] font-regular"
+            className="frontend-text text-white text-[2rem] sm:text-[2.5rem] md:text-[4rem] lg:text-[5rem] font-normal tracking-wider leading-tight whitespace-nowrap"
             style={{ fontFamily: "'Inter Tight', sans-serif" }}
           >
             Frontend
           </div>
           <div
-            className="developer-text text-white text-[40px] md:text-[80px] font-regular"
+            className="developer-text text-white text-[2rem] sm:text-[2.5rem] md:text-[4rem] lg:text-[5rem] font-normal tracking-wider leading-tight whitespace-nowrap"
             style={{ fontFamily: "'Inter Tight', sans-serif" }}
           >
             Developer
@@ -257,8 +256,8 @@ function Landing() {
         </div>
       </div>
 
-      {/* Scroll wrapper - Reduced height since no image */}
-      <div ref={wrapperRef} className="w-full relative min-h-[150vh]"></div>
+      {/* Scroll Trigger Area */}
+      <div ref={wrapperRef} className="w-full h-[220vh]"></div>
     </div>
   );
 }

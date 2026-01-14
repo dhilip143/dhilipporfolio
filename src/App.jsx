@@ -3,9 +3,10 @@ import About from "./Components/About";
 import Education from "/src/Components/Education.jsx";
 import Experience from "./Components/experience";
 import Landing from "./Components/Landing";
-import Projects from "./Components/projects";
+
 import Tools from "./Components/Tools";
 import  Connect  from "/src/Components/connect.jsx";
+import Live from "./Components/live";
 
 function App() {
   return (
@@ -13,10 +14,11 @@ function App() {
       <Landing />
       <About/>
       <Tools/>
-      <Projects/>
+       <Live/>
       <Experience/>
      <Education/>
      <Connect/>
+    
       
     </>
   );

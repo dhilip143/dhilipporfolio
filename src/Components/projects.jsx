@@ -52,76 +52,54 @@ export default function Projects() {
   ];
 
   useEffect(() => {
+    // Clear any existing ScrollTriggers
+    ScrollTrigger.getAll().forEach(t => t.kill());
+
     sectionsRef.current.forEach((el, i) => {
       if (!el) return;
 
       const image = el.querySelector(".project-image");
       const content = el.querySelector(".project-text");
 
-      // Hide content initially
-      gsap.set(content, { autoAlpha: 0, x: i % 2 === 0 ? 100 : -100 });
+      // Set initial states
+      gsap.set(image, {
+        scale: 0.8,
+        opacity: 0,
+        x: i % 2 === 0 ? -200 : 200,
+      });
 
-      // Create main timeline
+      gsap.set(content, { 
+        autoAlpha: 0, 
+        x: i % 2 === 0 ? 100 : -100 
+      });
+
+      // Create timeline with ScrollTrigger
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: el,
           start: "top 80%",
           end: "bottom 20%",
           scrub: 1,
-          markers: false, // Set to true for debugging
+          markers: false,
         },
       });
 
-      // Image animation - scale and position
-      tl.fromTo(
-        image,
-        {
-          scale: 0.8,
-          opacity: 0,
-          x: i % 2 === 0 ? -200 : 200,
-        },
-        {
-          scale: 1,
-          opacity: 1,
-          x: 0,
-          duration: 1,
-          ease: "power2.out",
-        }
-      );
-
-      // Content animation - slide in from opposite side
-      tl.fromTo(
-        content,
-        {
-          autoAlpha: 0,
-          x: i % 2 === 0 ? 100 : -100,
-        },
-        {
-          autoAlpha: 1,
-          x: 0,
-          duration: 0.8,
-          ease: "power2.out",
-        },
-        "-=0.5" // Overlap with image animation
-      );
-
-      // Reset animations when scrolling back up
-      ScrollTrigger.create({
-        trigger: el,
-        start: "top bottom",
-        end: "bottom top",
-        onLeaveBack: () => {
-          gsap.set(image, {
-            scale: 0.8,
-            opacity: 0,
-            x: i % 2 === 0 ? -200 : 200,
-          });
-          gsap.set(content, { 
-            autoAlpha: 0, 
-            x: i % 2 === 0 ? 100 : -100 
-          });
-        },
+      // Image animation
+      tl.to(image, {
+        scale: 1,
+        opacity: 1,
+        x: 0,
+        duration: 1,
+        ease: "power2.out",
       });
+
+      // Content animation - overlaps with image
+      tl.to(content, {
+        autoAlpha: 1,
+        x: 0,
+        duration: 0.8,
+        ease: "power2.out",
+      }, "-=0.5");
     });
 
     return () => {
@@ -151,20 +129,13 @@ export default function Projects() {
           <div
             key={i}
             ref={(el) => (sectionsRef.current[i] = el)}
-            className={`relative max-w-7xl mx-auto min-h-[600px] flex items-center ${
-              i % 2 === 0 ? "justify-start" : "justify-end"
-            }`}
+            className="relative max-w-7xl mx-auto min-h-[600px] flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16"
           >
             {/* Image Container */}
             <div 
-              className={`project-image relative z-10 overflow-hidden rounded-2xl shadow-2xl ${
-                i % 2 === 0 ? "order-1" : "order-2"
+              className={`project-image relative overflow-hidden rounded-2xl shadow-2xl w-full lg:w-[600px] h-[300px] lg:h-[400px] ${
+                i % 2 === 0 ? "lg:order-1" : "lg:order-2"
               }`}
-              style={{ 
-                width: '600px', 
-                height: '400px',
-                maxWidth: '90vw'
-              }}
             >
               <img
                 src={project.image}
@@ -175,17 +146,9 @@ export default function Projects() {
 
             {/* Content Container */}
             <div
-              className={`project-text relative z-20 max-w-lg ${
-                i % 2 === 0 
-                  ? "order-2 ml-16 text-center" 
-                  : "order-1 mr-16 text-center"
-              } ${
-                i % 2 === 0 ? "lg:pl-8" : "lg:pr-8"
+              className={`project-text relative w-full lg:w-[500px] text-center ${
+                i % 2 === 0 ? "lg:order-2" : "lg:order-1"
               }`}
-              style={{ 
-                width: '500px',
-                maxWidth: '90vw'
-              }}
             >
               <h3
                 className="text-yellow-400 text-3xl md:text-4xl font-bold mb-6"
